@@ -21,7 +21,6 @@
 // CSameGameDoc
 
 IMPLEMENT_DYNCREATE(CSameGameDoc, CDocument)
-
 BEGIN_MESSAGE_MAP(CSameGameDoc, CDocument)
 END_MESSAGE_MAP()
 
@@ -30,8 +29,6 @@ END_MESSAGE_MAP()
 
 CSameGameDoc::CSameGameDoc() noexcept
 {
-	// TODO: добавьте код для одноразового вызова конструктора
-
 }
 
 CSameGameDoc::~CSameGameDoc()
@@ -43,8 +40,8 @@ BOOL CSameGameDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: добавьте код повторной инициализации
-	// (Документы SDI будут повторно использовать этот документ)
+	// Установка (или сброс) параметров доски
+	m_board.SetupBoard();
 
 	return TRUE;
 }
