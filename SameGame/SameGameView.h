@@ -26,6 +26,9 @@ protected:
 
 // Реализация
 public:
+
+	void ResizeWindow();
+
 	virtual ~CSameGameView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -37,6 +40,8 @@ protected:
 // Созданные функции схемы сообщений
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual void OnInitialUpdate();
 };
 
 #ifndef _DEBUG  // версия отладки в SameGameView.cpp
