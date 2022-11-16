@@ -17,9 +17,25 @@ public:
 
 	// Геттеры для получения информации о параметрах игрового поля
 	int GetWidth(void) const { return m_nWidth; }
+	void SetWidth(int nWidth) { m_nWidth = (nWidth >= 3) ? nWidth : 3; }
+
 	int GetHeight(void) const { return m_nHeight; }
+	void SetHeight(int nHeight) { m_nHeight = (nHeight >= 3) ? nHeight : 3; }
+
 	int GetColumns(void) const { return m_nColumns; }
+	void SetColumns(int nColumns) { m_nColumns = (nColumns >= 5) ? nColumns : 5; }
+
 	int GetRows(void) const { return m_nRows; }
+	void SetRows(int nRows) { m_nRows = (nRows >= 5) ? nRows : 5; }
+
+	// Гетеры и cеттеры для количества цветов
+	int GetNumColors(void) { 
+		return m_nColors; 
+	}
+
+	void SetNumColors(int nColors) {
+		m_nColors = (nColors >= 3 && nColors <= 7) ? nColors : m_nColors;
+	}
 
 	// Мы закончили игру?
 	bool IsGameOver(void) const;
@@ -54,8 +70,8 @@ private:
 	// Указатель на двумерный массив
 	int** m_arrBoard;
 
-	// Список цветов: 0 – это цвет фона, 1-3 – это цвета блоков
-	COLORREF m_arrColors[4];
+	// Список цветов: 0 – это цвет фона, 1-7 – это цвета блоков
+	COLORREF m_arrColors[8];
 
 	// Информация о размере игрового поля
 	int m_nColumns;
@@ -65,5 +81,8 @@ private:
 
 	// Количество оставшихся блоков
 	int m_nRemaining;
+
+	// Количество цветов
+	int m_nColors;
 };
 

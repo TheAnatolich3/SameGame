@@ -133,3 +133,11 @@ void CSameGameDoc::Dump(CDumpContext& dc) const
 
 
 // Команды CSameGameDoc
+void CSameGameDoc::SetNumColors(int nColors)
+{
+	// Сначала задаем количество цветов...
+	m_board.SetNumColors(nColors);
+
+	// ...затем устанавливаем параметры игровой доски
+	m_board.SetupBoard();
+}

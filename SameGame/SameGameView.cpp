@@ -12,6 +12,7 @@
 
 #include "SameGameDoc.h"
 #include "SameGameView.h"
+#include "OptionDialog.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,6 +25,21 @@ IMPLEMENT_DYNCREATE(CSameGameView, CView)
 
 BEGIN_MESSAGE_MAP(CSameGameView, CView)
 	ON_WM_LBUTTONDOWN()
+	ON_WM_ERASEBKGND()
+
+	ON_COMMAND(ID_LEVEL_3COLORS, &CSameGameView::OnLevel3colors)
+	ON_COMMAND(ID_LEVEL_4COLORS, &CSameGameView::OnLevel4colors)
+	ON_COMMAND(ID_LEVEL_5COLORS, &CSameGameView::OnLevel5colors)
+	ON_COMMAND(ID_LEVEL_6COLORS, &CSameGameView::OnLevel6colors)
+	ON_COMMAND(ID_LEVEL_7COLORS, &CSameGameView::OnLevel7colors)
+
+	ON_UPDATE_COMMAND_UI(ID_LEVEL_3COLORS, &CSameGameView::OnUpdateLevel3colors)
+	ON_UPDATE_COMMAND_UI(ID_LEVEL_4COLORS, &CSameGameView::OnUpdateLevel4colors)
+	ON_UPDATE_COMMAND_UI(ID_LEVEL_5COLORS, &CSameGameView::OnUpdateLevel5colors)
+	ON_UPDATE_COMMAND_UI(ID_LEVEL_6COLORS, &CSameGameView::OnUpdateLevel6colors)
+	ON_UPDATE_COMMAND_UI(ID_LEVEL_7COLORS, &CSameGameView::OnUpdateLevel7colors)
+	ON_COMMAND(ID_SETUP_BLOCKCOUNT, &CSameGameView::OnSetupBlockcount)
+	ON_COMMAND(ID_SETUP_BLOCKSIZE, &CSameGameView::OnSetupBlocksize)
 END_MESSAGE_MAP()
 
 // Создание или уничтожение CSameGameView
@@ -193,4 +209,157 @@ void CSameGameView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 
 	CView::OnLButtonDown(nFlags, point);
+}
+
+
+void CSameGameView::OnLevel3colors()
+{
+	setColorCount(3);
+}
+
+
+void CSameGameView::OnUpdateLevel3colors(CCmdUI* pCmdUI)
+{
+	setColorCheck(pCmdUI, 3);
+}
+
+
+void CSameGameView::OnLevel4colors()
+{
+	setColorCount(4);
+}
+
+
+void CSameGameView::OnUpdateLevel4colors(CCmdUI* pCmdUI)
+{
+	setColorCheck(pCmdUI, 4);
+}
+
+
+void CSameGameView::OnLevel5colors()
+{
+	setColorCount(5);
+}
+
+
+void CSameGameView::OnUpdateLevel5colors(CCmdUI* pCmdUI)
+{
+	setColorCheck(pCmdUI, 5);
+}
+
+
+void CSameGameView::OnLevel6colors()
+{
+	setColorCount(6);
+}
+
+
+void CSameGameView::OnUpdateLevel6colors(CCmdUI* pCmdUI)
+{
+	setColorCheck(pCmdUI, 6);
+}
+
+
+void CSameGameView::OnLevel7colors()
+{
+	setColorCount(7);
+}
+
+
+void CSameGameView::OnUpdateLevel7colors(CCmdUI* pCmdUI)
+{
+	setColorCheck(pCmdUI, 7);
+}
+
+void CSameGameView::setColorCount(int numColors)
+{
+	// Сначала получаем указатель на документ
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	// Устанавливаем количество цветов 
+	pDoc->SetNumColors(numColors);
+	// Перерисовываем View
+	Invalidate();
+	UpdateWindow();
+}
+
+void CSameGameView::setColorCheck(CCmdUI* pCmdUI, int numColors)
+{
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	// Проверка установленного уровня сложности
+	pCmdUI->SetCheck(pDoc->GetNumColors() == numColors);
+}
+
+
+void CSameGameView::OnSetupBlockcount()
+{
+	// Получаем указатель на Document
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	// Создаем диалоговое окно
+	COptionDialog dlg(true, this);
+
+	// Устанавливаем параметры строк и столбцов
+	dlg.m_nValue1 = pDoc->GetRows();
+	dlg.m_nValue2 = pDoc->GetColumns();
+
+	// Отображаем полученное окно
+	if (dlg.DoModal() == IDOK)
+	{
+		// Сначала удаляем игровое поле
+		pDoc->DeleteBoard();
+
+		// Устанавливаем значения, переданные пользователем
+		pDoc->SetRows(dlg.m_nValue1);
+		pDoc->SetColumns(dlg.m_nValue2);
+
+		// Обновляем игровое поле
+		pDoc->SetupBoard();
+
+		// Изменяем размеры View
+		ResizeWindow();
+	}
+}
+
+
+void CSameGameView::OnSetupBlocksize()
+{
+	// Указатель на Document
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	// Создаем диалоговое окно
+	COptionDialog dlg(false, this);
+
+	// Устанавливаем параметры «Ширины/Высоты»
+	dlg.m_nValue1 = pDoc->GetWidth();
+	dlg.m_nValue2 = pDoc->GetHeight();
+
+	// Отображаем окно
+	if (dlg.DoModal() == IDOK)
+	{
+		// Удаляем игровое поле
+		pDoc->DeleteBoard();
+
+		// Считываем введенные пользователем параметры
+		pDoc->SetWidth(dlg.m_nValue1);
+		pDoc->SetHeight(dlg.m_nValue2);
+
+		// Обновляем игровую доску
+		pDoc->SetupBoard();
+
+		// Изменяем размеры View
+		ResizeWindow();
+	}
 }
