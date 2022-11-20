@@ -32,14 +32,18 @@ BEGIN_MESSAGE_MAP(CSameGameView, CView)
 	ON_COMMAND(ID_LEVEL_5COLORS, &CSameGameView::OnLevel5colors)
 	ON_COMMAND(ID_LEVEL_6COLORS, &CSameGameView::OnLevel6colors)
 	ON_COMMAND(ID_LEVEL_7COLORS, &CSameGameView::OnLevel7colors)
+	ON_COMMAND(ID_SETUP_BLOCKCOUNT, &CSameGameView::OnSetupBlockcount)
+	ON_COMMAND(ID_SETUP_BLOCKSIZE, &CSameGameView::OnSetupBlocksize)
+	ON_COMMAND(ID_EDIT_UNDO, &CSameGameView::OnEditUndo)
+	ON_COMMAND(ID_EDIT_PASTE, &CSameGameView::OnEditPaste)
 
 	ON_UPDATE_COMMAND_UI(ID_LEVEL_3COLORS, &CSameGameView::OnUpdateLevel3colors)
 	ON_UPDATE_COMMAND_UI(ID_LEVEL_4COLORS, &CSameGameView::OnUpdateLevel4colors)
 	ON_UPDATE_COMMAND_UI(ID_LEVEL_5COLORS, &CSameGameView::OnUpdateLevel5colors)
 	ON_UPDATE_COMMAND_UI(ID_LEVEL_6COLORS, &CSameGameView::OnUpdateLevel6colors)
 	ON_UPDATE_COMMAND_UI(ID_LEVEL_7COLORS, &CSameGameView::OnUpdateLevel7colors)
-	ON_COMMAND(ID_SETUP_BLOCKCOUNT, &CSameGameView::OnSetupBlockcount)
-	ON_COMMAND(ID_SETUP_BLOCKSIZE, &CSameGameView::OnSetupBlocksize)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_UNDO, &CSameGameView::OnUpdateEditUndo)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, &CSameGameView::OnUpdateEditPaste)
 END_MESSAGE_MAP()
 
 // Создание или уничтожение CSameGameView
@@ -362,4 +366,59 @@ void CSameGameView::OnSetupBlocksize()
 		// Изменяем размеры View
 		ResizeWindow();
 	}
+}
+
+
+void CSameGameView::OnEditUndo()
+{
+	// Получаем указатель на Document
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	pDoc->UndoLast();
+
+	// Перерисовываем View
+	Invalidate();
+	UpdateWindow();
+}
+
+
+void CSameGameView::OnUpdateEditUndo(CCmdUI* pCmdUI)
+{
+	// Сначала получаем указатель на Document
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	// Включаем опцию, если она доступна
+	pCmdUI->Enable(pDoc->CanUndo());
+}
+
+
+void CSameGameView::OnEditPaste()
+{
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	pDoc->RedoLast();
+
+	// Перерисовываем View
+	Invalidate();
+	UpdateWindow();
+}
+
+
+void CSameGameView::OnUpdateEditPaste(CCmdUI* pCmdUI)
+{
+	// Сначала получаем указатель на Document
+	CSameGameDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	// Включаем опцию, если она доступна
+	pCmdUI->Enable(pDoc->CanRedo());
 }

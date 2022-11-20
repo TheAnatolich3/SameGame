@@ -6,6 +6,9 @@ public:
 	// Конструктор по умолчанию
 	CSameGameBoard(void);
 
+	// Конструктор глубокого копирования
+	CSameGameBoard(const CSameGameBoard& board);
+
 	// Деструктор 
 	~CSameGameBoard(void);
 

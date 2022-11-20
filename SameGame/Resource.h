@@ -5,7 +5,6 @@
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
 #define IDR_SameGameTYPE                130
-#define IDD_DIALOG1                     310
 #define IDD_DIALOG_OPTIONS              310
 #define IDC_BUTTON_DEFAULTS             1000
 #define IDC_EDIT_VALUE_1                1001
